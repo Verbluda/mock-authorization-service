@@ -1,8 +1,7 @@
 package org.example.mock_authorization_service.controller;
 
-import org.example.mock_authorization_service.model.dto.LoginRequestDto;
-import org.example.mock_authorization_service.model.dto.LoginResponseDto;
-import org.example.mock_authorization_service.model.dto.StatusResponseDto;
+import org.example.mock_authorization_service.model.dto.LoginInfo;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -14,17 +13,18 @@ import java.util.concurrent.ThreadLocalRandom;
 public class AuthController {
 
     @GetMapping("/status")
-    public StatusResponseDto getStatus() {
+    public ResponseEntity<String> getStatus() {
         randomDelay();
-        return new StatusResponseDto("Login1", "ok");
+        return ResponseEntity.ok("{\"login\":\"Login1\",\"status\":\"ok\"}");
     }
 
     @PostMapping("/login")
-    public LoginResponseDto login(@RequestBody LoginRequestDto loginRequest) {
+    public ResponseEntity<LoginInfo> login(@RequestBody LoginInfo loginInfo) {
         randomDelay();
         String date = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        return new LoginResponseDto(loginRequest.getLogin(), loginRequest.getPassword(), date);
+        loginInfo.setDate(date);
+        return ResponseEntity.ok(loginInfo);
     }
 
     private void randomDelay() {

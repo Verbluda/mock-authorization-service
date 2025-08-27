@@ -1,10 +1,14 @@
 package org.example.mock_authorization_service.model.dto;
 
-public class LoginRequestDto {
+public class LoginInfo {
+
     private String login;
     private String password;
+    private String date;
 
-    public LoginRequestDto() {
+    public LoginInfo(String password, String login) {
+        this.password = password;
+        this.login = login;
     }
 
     public String getLogin() {
@@ -21,5 +25,13 @@ public class LoginRequestDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
