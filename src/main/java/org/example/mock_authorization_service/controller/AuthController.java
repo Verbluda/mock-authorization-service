@@ -1,6 +1,7 @@
 package org.example.mock_authorization_service.controller;
 
-import org.example.mock_authorization_service.model.dto.LoginInfo;
+import jakarta.validation.Valid;
+import org.example.mock_authorization_service.model.LoginInfo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginInfo> login(@RequestBody LoginInfo loginInfo) {
+    public ResponseEntity<LoginInfo> login(@Valid @RequestBody LoginInfo loginInfo) {
         randomDelay();
         String date = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
