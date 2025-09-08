@@ -7,11 +7,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @RestController
 @RequestMapping("/api")
 public class AuthController {
+
+    private static final List<byte[]> memoryLeak = new ArrayList<>();
 
     @GetMapping("/status")
     public ResponseEntity<String> getStatus() {
@@ -26,6 +30,13 @@ public class AuthController {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         loginInfo.setDate(date);
         return ResponseEntity.ok(loginInfo);
+    }
+
+    @GetMapping("/leak")
+    public ResponseEntity<String> leakMemory() {
+        memoryLeak.add(new byte[1024 * 1024]);
+
+        return ResponseEntity.ok("Утечка добавлена");
     }
 
     private void randomDelay() {
