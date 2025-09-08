@@ -34,8 +34,7 @@ public class AuthController {
 
     @GetMapping("/leak")
     public ResponseEntity<String> leakMemory() {
-        memoryLeak.add(new byte[1024 * 1024]);
-
+        memoryLeak.add(new byte[10 * 1024]);
         return ResponseEntity.ok("Утечка добавлена");
     }
 
