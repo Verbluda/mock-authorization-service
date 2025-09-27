@@ -1,41 +1,31 @@
 package org.example.mock_authorization_service.controller;
 
 import jakarta.validation.Valid;
-import org.example.mock_authorization_service.model.LoginInfo;
+import lombok.RequiredArgsConstructor;
+import org.example.mock_authorization_service.model.User;
+import org.example.mock_authorization_service.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class AuthController {
 
-    private static final List<byte[]> memoryLeak = new ArrayList<>();
+    private final AuthService authService;
 
-    @GetMapping("/status")
-    public ResponseEntity<String> getStatus() {
+    @GetMapping("/user/{login}")
+    public ResponseEntity<User> getUser(@PathVariable String login) {
         randomDelay();
-        return ResponseEntity.ok("{\"login\":\"Login1\",\"status\":\"ok\"}");
+        return authService.getUser(login);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginInfo> login(@Valid @RequestBody LoginInfo loginInfo) {
+    @PostMapping("/addUser")
+    public ResponseEntity<String> addUser(@Valid @RequestBody User user) {
         randomDelay();
-        String date = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        loginInfo.setDate(date);
-        return ResponseEntity.ok(loginInfo);
-    }
-
-    @GetMapping("/leak")
-    public ResponseEntity<String> leakMemory() {
-        memoryLeak.add(new byte[100 * 1024]);
-        return ResponseEntity.ok("Утечка добавлена");
+        return authService.addUser(user);
     }
 
     private void randomDelay() {
