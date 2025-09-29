@@ -1,32 +1,24 @@
 package org.example.mock_authorization_service.repository.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.example.mock_authorization_service.model.User;
 import org.example.mock_authorization_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDateTime;
 
 @Repository
+@RequiredArgsConstructor
 public class DataBaseWorker implements UserRepository {
 
-    private final String url;
-    private final String user;
-    private final String password;
-
-    public DataBaseWorker(
-            @Value("${spring.datasource.url}") String url,
-            @Value("${spring.datasource.username}") String user,
-            @Value("${spring.datasource.password}") String password) {
-        this.url = url;
-        this.user = user;
-        this.password = password;
-    }
+    private final DataSource dataSource;
 
     private Connection getConnection() {
         try {
-            return DriverManager.getConnection(url, user, password);
+            return dataSource.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException("the connection with the database could not be established", e);
         }
