@@ -1,9 +1,7 @@
-package org.example.mock_authorization_service.repository.impl;
+package org.example.mock_authorization_service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.mock_authorization_service.model.User;
-import org.example.mock_authorization_service.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -12,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Repository
 @RequiredArgsConstructor
-public class DataBaseWorker implements UserRepository {
+public class DataBaseWorker {
 
     private final DataSource dataSource;
 
@@ -24,7 +22,6 @@ public class DataBaseWorker implements UserRepository {
         }
     }
 
-    @Override
     public User findUserByLogin(String login) {
         Connection connection = null;
         Statement statement = null;
@@ -65,7 +62,6 @@ public class DataBaseWorker implements UserRepository {
         }
     }
 
-    @Override
     public int insertUser(User user) {
         String insertQueryForPasswords = "INSERT INTO passwords (login, password, date) VALUES (?, ?, ?)";
         String insertQueryForEmails = "INSERT INTO emails (login, email) VALUES (?, ?)";

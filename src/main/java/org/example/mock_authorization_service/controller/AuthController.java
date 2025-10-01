@@ -2,8 +2,9 @@ package org.example.mock_authorization_service.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.mock_authorization_service.DataBaseWorker;
+import org.example.mock_authorization_service.exception.UserNotFoundException;
 import org.example.mock_authorization_service.model.User;
-import org.example.mock_authorization_service.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,18 +15,21 @@ import java.util.concurrent.ThreadLocalRandom;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final DataBaseWorker dataBaseWorker;
 
     @GetMapping("/user/{login}")
     public ResponseEntity<User> getUser(@PathVariable String login) {
         randomDelay();
-        return authService.getUser(login);
+        User user = dataBaseWorker.findUserByLogin(login);
+        if (user == null) {throw new UserNotFoundException(login);}
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/addUser")
     public ResponseEntity<String> addUser(@Valid @RequestBody User user) {
         randomDelay();
-        return authService.addUser(user);
+        int rowsCount = dataBaseWorker.insertUser(user);
+        return ResponseEntity.ok("User " + user + " was successfully added to Database. " + rowsCount + " lines were updated");
     }
 
     private void randomDelay() {
