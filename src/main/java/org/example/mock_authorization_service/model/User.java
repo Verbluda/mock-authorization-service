@@ -22,7 +22,6 @@ public class User {
     private String login;
     @NotBlank(message = "password must not be blank")
     private String password;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     @JsonSetter(nulls = Nulls.SKIP)
     private LocalDateTime date = LocalDateTime.now();
     @NotBlank(message = "email must not be blank")
